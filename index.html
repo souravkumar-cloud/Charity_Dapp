@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Donation Platform</title>
+    <link href="style.css" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#causes">Causes</a></li>
+                <li><a href="#donate">Donate</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Donate to Your Favorite Cause</h1>
+        
+        <div class="donation-card">
+            <div class="form-group">
+                <label for="causeSelect">Select a Cause</label>
+                <select id="causeSelect" required>
+                    <option value="">--Select a Cause--</option>
+                    <option value="Education">Education</option>
+                    <option value="Health">Health</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Animal Welfare">Animal Welfare</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="donationAmount">Donation Amount (USD)</label>
+                <input type="number" id="donationAmount" placeholder="Enter amount" min="1" step="0.01" required>
+            </div>
+            
+            <button class="donate-btn" onclick="donate()">Donate</button>
+            
+            <div id="totalDonated" class="total-donated">Total Donated: $0.00</div>
+            
+            <div class="transaction-log">
+                <h3>Recent Transactions</h3>
+                <div id="transactionList"></div>
+            </div>
+        </div>
+    </main>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Processing donation...</p>
+    </div>
+    
+    <div class="modal" id="thankYouModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thank You for Your Donation!</h2>
+                <button class="close-button" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+                <p id="transactionCode" class="transaction-code"></p>
+            </div>
+            <button class="modal-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Crypto Donation Platform. All rights reserved.</p>
+        <p>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
