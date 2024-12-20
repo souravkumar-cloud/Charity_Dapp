@@ -45,30 +45,55 @@ function closeModal() {
 }
 
 // Donation handling
-function donate() {
-    const amount = parseFloat(document.getElementById('donationAmount').value);
-    const cause = document.getElementById('causeSelect').value;
+async function donate() {
+    if (typeof window.ethereum === 'undefined') {
+        alert('MetaMask is not installed. Please install MetaMask and try again.');
+        return;
+    }
 
-    if (amount >= 0.01 && cause) {
-        toggleLoading(true);
+    try {
+        // Ensure MetaMask asks for permission each time
+        await window.ethereum.request({
+            method: 'wallet_requestPermissions',
+            params: [{ eth_accounts: {} }],
+        });
 
-        setTimeout(() => {
-            const encryptedCode = generateEncryptedCode();
-            totalDonated += amount;
-            document.getElementById('totalDonated').innerText = `Total Donated: $${totalDonated.toFixed(2)}`;
+        // Request MetaMask accounts
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const userAccount = accounts[0];
+        console.log(`Connected account: ${userAccount}`);
 
-            transactions.push({ cause, amount, code: encryptedCode });
-            updateTransactionLog();
-            toggleLoading(false);
-            showThankYouModal(amount, cause, encryptedCode);
+        // Proceed with donation logic
+        const amount = parseFloat(document.getElementById('donationAmount').value);
+        const cause = document.getElementById('causeSelect').value;
 
-            document.getElementById('donationAmount').value = '';
-            document.getElementById('causeSelect').selectedIndex = 0;
-        }, 1500);
-    } else {
-        alert('Please enter a valid amount (minimum $0.01) and select a cause.');
+        if (amount >= 0.01 && cause) {
+            toggleLoading(true);
+
+            setTimeout(() => {
+                const encryptedCode = generateEncryptedCode();
+                totalDonated += amount;
+                document.getElementById('totalDonated').innerText = `Total Donated: $${totalDonated.toFixed(2)}`;
+
+                transactions.push({ cause, amount, code: encryptedCode });
+                updateTransactionLog();
+                toggleLoading(false);
+                showThankYouModal(amount, cause, encryptedCode);
+
+                document.getElementById('donationAmount').value = '';
+                document.getElementById('causeSelect').selectedIndex = 0;
+            }, 1500);
+        } else {
+            alert('Please enter a valid amount (minimum $0.01) and select a cause.');
+        }
+    } catch (error) {
+        console.error('MetaMask connection failed', error);
+        alert('MetaMask connection was not granted. Please try again.');
     }
 }
+
+
+
 
 // Withdrawal and authentication functions
 document.querySelector('.hamburger-menu').addEventListener('click', function() {
@@ -167,3 +192,20 @@ window.onclick = function(event) {
         }
     });
 };
+
+function web3metaopen() {
+    if (window.ethereum) {
+        // Check if MetaMask is installed
+        window.ethereum.request({ method: 'eth_requestAccounts' })
+            .then(result => {
+                console.log("Connected Account:", result[0]);
+                // Continue with your donation process
+            })
+            .catch(error => {
+                console.error("User rejected the connection request:", error);
+                alert("Please connect to MetaMask to proceed.");
+            });
+    } else {
+        alert("Please install MetaMask.");
+    }
+}
