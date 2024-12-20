@@ -117,6 +117,14 @@ function closeWithdrawModal() {
     withdrawModal.classList.remove('active');
 }
 
+function web3metaopen(){
+    ethereum.request({
+        method:'eth_requestAccounts'
+    }).then(result=>{
+        console.log(result);
+    });
+}
+
 function withdrawFunds() {
     if (!isOwner) {
         alert('Unauthorized access');
