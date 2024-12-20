@@ -118,11 +118,15 @@ function closeWithdrawModal() {
 }
 
 function web3metaopen(){
-    ethereum.request({
-        method:'eth_requestAccounts'
-    }).then(result=>{
-        console.log(result);
-    });
+    if(window.ethereum){
+        window.ethereum.request({
+            method:'eth_requestAccounts'
+        }).then(result=>{
+            console.log(result[0]);
+        });
+    }else{
+        alert("please install metamask");
+    }
 }
 
 function withdrawFunds() {
